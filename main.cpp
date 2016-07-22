@@ -36,7 +36,7 @@ public:
   CDnsSeedOpts() : nThreads(96), nDnsThreads(4), nPort(53), mbox(NULL), ns(NULL), host(NULL), tor(NULL), fDaemon(false), fUseTestNet(false), fWipeBan(false), fWipeIgnore(false), ipv4_proxy(NULL), ipv6_proxy(NULL) {}
 
   void ParseCommandLine(int argc, char **argv) {
-    static const char *help = "Bitcoin-seeder\n"
+    static const char *help = "DarkSilk-seeder\n"
                               "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p <port>]\n"
                               "\n"
                               "Options:\n"
@@ -74,11 +74,11 @@ public:
         {"testnet", no_argument, &fUseTestNet, 1},
         {"wipeban", no_argument, &fWipeBan, 1},
         {"wipeignore", no_argument, &fWipeBan, 1},
-        {"help", no_argument, 0, 'h'},
+        {"help", no_argument, 0, '?'},
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "h:n:m:t:p:d:o:i:k:w:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "h:n:m:t:p:d:o:i:k:w:?", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
         case 'h': {
@@ -156,7 +156,10 @@ public:
         filter_whitelist.insert(13);
     }
     if (host != NULL && ns == NULL) showHelp = true;
-    if (showHelp) fprintf(stderr, help, argv[0]);
+    if (showHelp) {
+      fprintf(stderr, help, argv[0]);
+      exit(0);
+    }
   }
 };
 
@@ -393,30 +396,16 @@ extern "C" void* ThreadStats(void*) {
   } while(1);
 }
 
-static const string mainnet_seeds[] = {"158.69.126.193:17170",
-                                       "198.27.97.180:17170",
-                                       "198.27.97.180:9999",
-                                       "99.254.31.42:17170",
-                                       "198.50.243.90:17170",
-                                       "txdns.infernopool.com",
+static const string mainnet_seeds[] = {"darksilk-seed.silknetwork.org:31500",
                                        ""};
-static const string testnet_seeds[] = {"158.69.126.193:17170",
-                                       "198.27.97.180:17170",
-                                       "198.27.97.180:9999",
-                                       "99.254.31.42:17170",
-                                       "198.50.243.90:17170",
-                                       "txdns.infernopool.com",
+static const string testnet_seeds[] = {"darksilk-seed.silknetwork.org:31500",
                                        ""};
 static const string *seeds = mainnet_seeds;
 
 extern "C" void* ThreadSeeder(void*) {
   if (!fTestNet){
     db.Add(CService("127.0.0.1", 17170, true), true);
-    db.Add(CService("198.27.97.180", 17170, true), true);
-    db.Add(CService("198.27.97.180", 9999, true), true);
-    db.Add(CService("99.254.31.42", 17170, true), true);
-    db.Add(CService("198.50.243.90", 17170, true), true);
-    db.Add(CService("txdns.infernopool.com", 17170), true)
+    db.Add(CService("darksilk-seed.silknetwork.org", 31500, true), true);
   }
   do {
     for (int i=0; seeds[i] != ""; i++) {
@@ -467,10 +456,10 @@ int main(int argc, char **argv) {
   bool fDNS = true;
   if (opts.fUseTestNet) {
       printf("Using testnet.\n");
-      pchMessageStart[0] = 0x0b;
-      pchMessageStart[1] = 0x11;
-      pchMessageStart[2] = 0x09;
-      pchMessageStart[3] = 0x07;
+      pchMessageStart[0] = 0x42;
+      pchMessageStart[1] = 0x04;
+      pchMessageStart[2] = 0x20;
+      pchMessageStart[3] = 0x24;
       seeds = testnet_seeds;
       fTestNet = true;
   }

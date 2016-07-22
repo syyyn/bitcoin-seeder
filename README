@@ -1,7 +1,7 @@
-bitcoin-seeder
+darksilk-seeder
 ==============
 
-Bitcoin-seeder is a crawler for the Bitcoin network, which exposes a list
+Bitcoin-seeder is a crawler for the DarkSilk network, which exposes a list
 of reliable nodes via a built-in DNS server.
 
 Features:
@@ -22,10 +22,10 @@ $ sudo apt-get install build-essential libboost-all-dev libssl-dev php5-cli php5
 **Let's get started**
 
  1. Get your CF API Key (My Settings -> Account -> API Key -> View API Key)
- 2. Download and start bitcoin-seeder
+ 2. Download and start darksilk-seeder
 
-    git clone https://github.com/transfer-dev/bitcoin-seeder
-    cd bitcoin-seeder
+    git clone https://github.com/transfer-dev/darksilk-seeder
+    cd darksilk-seeder
     make
     chmod +x dnsseed start
     ./dnsseed -t 250
@@ -43,13 +43,13 @@ $ sudo apt-get install build-essential libboost-all-dev libssl-dev php5-cli php5
     $number_of_records = 10; //maximum n A records with $name... 
     $user = "emailofcloudflareaccount"; //user name
     $key = "yourapikey"; //key for cloudflare api found in account settings
-    $seed_dump = "/path/to/dnsseed.dump"; //absolute path to dnsseed.dump in the bitcoin-seeder root directory 
+    $seed_dump = "/path/to/dnsseed.dump"; //absolute path to dnsseed.dump in the darksilk-seeder root directory 
     
 accordingly. (The number_of_records in the table displayed above is "10" and I think that's a good number.)
 4. Have a cronjob run cf-php regularly
 
     crontab -e
-    * * * * * php ~/bitcoin-seeder/cf-php/cf.php
+    * * * * * php ~/darksilk-seeder/cf-php/cf.php
 
 
 That should be it. You now have your own TX DNS seed. 
